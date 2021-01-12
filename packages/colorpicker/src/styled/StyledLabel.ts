@@ -6,19 +6,20 @@
  */
 
 import styled from 'styled-components';
+import { Label } from '@zendeskgarden/react-forms';
 import { retrieveComponentStyles, DEFAULT_THEME } from '@zendeskgarden/react-theming';
 
-const COMPONENT_ID = 'colorpicker';
+const COMPONENT_ID = 'colorpicker.label';
 
-export const StyledColorPicker = styled.div.attrs({
+export const StyledLabel = styled(Label).attrs({
   'data-garden-id': COMPONENT_ID,
   'data-garden-version': PACKAGE_VERSION
 })`
-  width: 312px;
+  font-weight: ${props => props.theme.fontWeights.regular};
 
   ${props => retrieveComponentStyles(COMPONENT_ID, props)};
 `;
 
-StyledColorPicker.defaultProps = {
+StyledLabel.defaultProps = {
   theme: DEFAULT_THEME
 };

@@ -7,18 +7,22 @@
 
 import styled from 'styled-components';
 import { retrieveComponentStyles, DEFAULT_THEME } from '@zendeskgarden/react-theming';
+import { Field } from '@zendeskgarden/react-forms';
 
-const COMPONENT_ID = 'colorpicker';
+const COMPONENT_ID = 'colorpicker.hex.field';
 
-export const StyledColorPicker = styled.div.attrs({
+export const StyledHexField = styled(Field).attrs({
   'data-garden-id': COMPONENT_ID,
   'data-garden-version': PACKAGE_VERSION
 })`
-  width: 312px;
+  display: flex;
+  flex-direction: column;
+  width: 86px;
+  text-align: center;
 
   ${props => retrieveComponentStyles(COMPONENT_ID, props)};
 `;
 
-StyledColorPicker.defaultProps = {
+StyledHexField.defaultProps = {
   theme: DEFAULT_THEME
 };

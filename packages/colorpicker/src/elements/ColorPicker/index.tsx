@@ -5,17 +5,30 @@
  * found at http://www.apache.org/licenses/LICENSE-2.0.
  */
 
-import React, { HTMLAttributes } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { StyledColorPicker } from '../../styled';
 import { Saturation } from '../Saturation';
-import { StyledHue, StyledAlpha, StyledPreviewBox } from '../../styled';
-import { Field, Label, Range, Input } from '@zendeskgarden/react-forms';
-import { getInitialState, reducer } from './reducer';
+import {
+  StyledHue,
+  StyledFlex,
+  StyledInput,
+  StyledLabel,
+  StyledAlpha,
+  StyledSliders,
+  StyledHexField,
+  StyledRGBAField,
+  StyledInputGroup,
+  StyledPreview,
+  StyledSaturation,
+  StyledColorPicker
+} from '../../styled';
+import { Field, Label } from '@zendeskgarden/react-forms';
+import { getInitialState, reducer, IRGBColor, IHSVColor, IColorPickerState } from './reducer';
 
-interface IColorPickerProps extends HTMLAttributes<HTMLDivElement> {
+interface IColorPickerProps {
   /** Apply compact styling */
-  isCompact?: boolean;
+  color: string | IRGBColor;
+  onChange?: (state: IColorPickerState, event: any) => void;
 }
 
 /**
@@ -24,34 +37,34 @@ interface IColorPickerProps extends HTMLAttributes<HTMLDivElement> {
 export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
   ({ color, onChange }, ref) => {
     const [state, dispatch] = React.useReducer(reducer, getInitialState(color));
+    const [event, setEvent] = React.useState<Event>();
+
+    React.useEffect(() => {
+      onChange && onChange(state, event);
+    }, [state, event, onChange]);
 
     return (
-      <div style={{ width: '312px' }}>
-        <div
-          style={{
-            position: 'relative',
-            paddingBottom: '75%',
-            overflow: 'hidden'
-          }}
-        >
+      <StyledColorPicker>
+        <StyledSaturation>
           <Saturation
             hue={state.hue}
             saturation={state.saturation}
             lightness={state.lightness}
-            onChange={(hsv: any) => {
+            onChange={(hsv: IHSVColor, e: Event) => {
               dispatch({
-                type: 'saturation block change',
+                type: 'saturation change',
                 payload: hsv
               });
+              setEvent(e);
             }}
           />
-        </div>
+        </StyledSaturation>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '3px' }}>
-          <StyledPreviewBox
+        <StyledFlex>
+          <StyledPreview
             rgb={{ red: state.red, green: state.green, blue: state.blue, alpha: state.alpha }}
           />
-          <div style={{ width: '100%', marginLeft: '8px' }}>
+          <StyledSliders>
             <Field>
               <Label hidden>Hue Slider</Label>
               <StyledHue
@@ -59,7 +72,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
                 max={359}
                 value={state.hue}
                 onChange={e => {
-                  dispatch({ type: 'hue change', payload: Number(e.target.value) });
+                  dispatch({ type: 'hue slider change', payload: e.target.value });
                 }}
               />
             </Field>
@@ -67,107 +80,81 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
             <Field>
               <Label hidden>Alpha Slider</Label>
               <StyledAlpha
-                color={{ red: state.red, green: state.green, blue: state.blue }}
-                step={0.01}
                 max={1}
-                value={state.alpha}
-                onChange={(e: any) => {
-                  dispatch({ type: 'alpha change', payload: e.target.value });
+                step={0.01}
+                value={state.alpha / 100}
+                rgb={{ red: state.red, green: state.green, blue: state.blue }}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  dispatch({ type: 'alpha slider change', payload: e.target.value });
                 }}
               />
             </Field>
-          </div>
-        </div>
+          </StyledSliders>
+        </StyledFlex>
 
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            marginTop: '8px'
-          }}
-        >
-          <Field
-            style={{ display: 'flex', flexDirection: 'column', textAlign: 'center', width: '86px' }}
-          >
-            <Label style={{ fontWeight: 400 }}>Hex</Label>
-            <Input
-              style={{
-                marginTop: '4px'
-              }}
+        <StyledInputGroup>
+          <StyledHexField>
+            <StyledLabel>Hex</StyledLabel>
+            <StyledInput
+              isCompact
               maxLength={7}
               value={state.hex}
               onChange={e => {
                 dispatch({ type: 'hex change', payload: e.target.value });
               }}
             />
-          </Field>
-          <Field
-            style={{ display: 'flex', flexDirection: 'column', textAlign: 'center', width: '50px' }}
-          >
-            <Label style={{ fontWeight: 400 }}>R</Label>
-            <Input
-              style={{
-                marginTop: '4px'
-              }}
+          </StyledHexField>
+          <StyledRGBAField>
+            <StyledLabel>R</StyledLabel>
+            <StyledInput
+              isCompact
               maxLength={3}
               value={state.redInput}
               onChange={e => {
                 dispatch({ type: 'red change', payload: e.target.value });
               }}
             />
-          </Field>
-          <Field
-            style={{ display: 'flex', flexDirection: 'column', textAlign: 'center', width: '50px' }}
-          >
-            <Label style={{ fontWeight: 400 }}>G</Label>
-            <Input
-              style={{
-                marginTop: '4px'
-              }}
+          </StyledRGBAField>
+          <StyledRGBAField>
+            <StyledLabel>G</StyledLabel>
+            <StyledInput
+              isCompact
               maxLength={3}
               value={state.greenInput}
               onChange={e => {
                 dispatch({ type: 'green change', payload: e.target.value });
               }}
             />
-          </Field>
-          <Field
-            style={{ display: 'flex', flexDirection: 'column', textAlign: 'center', width: '50px' }}
-          >
-            <Label style={{ fontWeight: 400 }}>B</Label>
-            <Input
-              style={{
-                marginTop: '4px'
-              }}
+          </StyledRGBAField>
+          <StyledRGBAField>
+            <StyledLabel>B</StyledLabel>
+            <StyledInput
+              isCompact
               maxLength={3}
               value={state.blueInput}
               onChange={e => {
                 dispatch({ type: 'blue change', payload: e.target.value });
               }}
             />
-          </Field>
-          <Field
-            style={{ display: 'flex', flexDirection: 'column', textAlign: 'center', width: '50px' }}
-          >
-            <Label style={{ fontWeight: 400 }}>A</Label>
-            <Input
-              style={{
-                marginTop: '4px'
-              }}
+          </StyledRGBAField>
+          <StyledRGBAField>
+            <StyledLabel>A</StyledLabel>
+            <StyledInput
+              isCompact
               type="number"
               min="0"
               max="100"
-              value={Math.round(state.alpha * 100)}
+              value={state.alphaInput}
               onChange={e => {
                 dispatch({
                   type: 'alpha change',
-                  payload: Number(e.target.value) / 100
+                  payload: e.target.value
                 });
               }}
             />
-          </Field>
-        </div>
-      </div>
+          </StyledRGBAField>
+        </StyledInputGroup>
+      </StyledColorPicker>
     );
   }
 );
@@ -175,5 +162,5 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
 ColorPicker.displayName = 'ColorPicker';
 
 ColorPicker.propTypes = {
-  isCompact: PropTypes.bool
+  color: PropTypes.any
 };

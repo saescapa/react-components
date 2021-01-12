@@ -5,20 +5,24 @@
  * found at http://www.apache.org/licenses/LICENSE-2.0.
  */
 
+import { Field } from '@zendeskgarden/react-forms';
 import styled from 'styled-components';
 import { retrieveComponentStyles, DEFAULT_THEME } from '@zendeskgarden/react-theming';
 
-const COMPONENT_ID = 'colorpicker';
+const COMPONENT_ID = 'colorpicker.rgb.field';
 
-export const StyledColorPicker = styled.div.attrs({
+export const StyledRGBAField = styled(Field).attrs({
   'data-garden-id': COMPONENT_ID,
   'data-garden-version': PACKAGE_VERSION
 })`
-  width: 312px;
+  display: flex;
+  flex-direction: column;
+  width: 51px;
+  text-align: center;
 
   ${props => retrieveComponentStyles(COMPONENT_ID, props)};
 `;
 
-StyledColorPicker.defaultProps = {
+StyledRGBAField.defaultProps = {
   theme: DEFAULT_THEME
 };

@@ -5,24 +5,24 @@
  * found at http://www.apache.org/licenses/LICENSE-2.0.
  */
 
-import styled, { ThemeProps, DefaultTheme, css } from 'styled-components';
-import { retrieveComponentStyles, DEFAULT_THEME, getColor } from '@zendeskgarden/react-theming';
+import styled from 'styled-components';
 import { Range } from '@zendeskgarden/react-forms';
+import { retrieveComponentStyles, DEFAULT_THEME } from '@zendeskgarden/react-theming';
 
-const COMPONENT_ID = '{{component}}.example';
+const COMPONENT_ID = 'styled.hue';
 
-export interface IStyledHueProps extends ThemeProps<DefaultTheme> {
-  isCompact?: boolean;
-}
-
-export const StyledHue = styled(Range).attrs<IStyledHueProps>({
+export const StyledHue = styled(Range).attrs({
   'data-garden-id': COMPONENT_ID,
   'data-garden-version': PACKAGE_VERSION
-})<IStyledHueProps>`
+})`
+  /* stylelint-disable-next-line declaration-no-important */
   margin-top: 0 !important;
-  height: 0px !important;
+  /* stylelint-disable-next-line declaration-no-important */
+  height: 0 !important;
 
   &::-webkit-slider-runnable-track {
+    border-radius: 0;
+    /* stylelint-disable */
     background: linear-gradient(
       to right,
       #f00 0%,
@@ -33,13 +33,14 @@ export const StyledHue = styled(Range).attrs<IStyledHueProps>({
       #f0f 83%,
       #f00 100%
     );
-    height: 12px;
+    /* stylelint-enable */
+    height: ${props => props.theme.space.base * 3}px;
   }
 
   &::-webkit-slider-thumb {
-    margin-top: -2px;
-    width: 16px;
-    height: 16px;
+    margin-top: -${props => props.theme.space.base / 2}px;
+    width: ${props => props.theme.space.base * 4}px;
+    height: ${props => props.theme.space.base * 4}px;
   }
 
   ${props => retrieveComponentStyles(COMPONENT_ID, props)};

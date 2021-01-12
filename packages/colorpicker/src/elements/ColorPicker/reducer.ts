@@ -8,11 +8,106 @@
 import { parseToHsl, parseToRgb, rgb as rgbToString } from 'polished';
 import { hsv2hsl, rgbToHsl, hsl2rgb } from '../../utils/conversion';
 
-// TODO: Refactor
-export function getInitialState(initialColor: any) {
-  const isHex = typeof initialColor === 'string' && initialColor.includes('#');
+export interface IColorPickerState {
+  hue: number;
+  saturation: number;
+  lightness: number;
+  red: number;
+  green: number;
+  blue: number;
+  alpha: number;
+  redInput: number | string;
+  greenInput: number | string;
+  blueInput: number | string;
+  alphaInput: number | string;
+  hex: string;
+}
 
-  if (isHex) {
+export const SATURATION_CHANGE = 'saturation change';
+export const HUE_CHANGE = 'hue slider change';
+export const ALPHA_SLIDER_CHANGE = 'alpha slider change';
+export const HEX_CHANGE = 'hex change';
+export const RED_CHANGE = 'red change';
+export const GREEN_CHANGE = 'green change';
+export const BLUE_CHANGE = 'blue change';
+export const ALPHA_CHANGE = 'alpha change';
+
+export interface IHSVColor {
+  h: number;
+  s: number;
+  v: number;
+}
+
+export interface IHSLColor {
+  h: number;
+  s: number;
+  l: number;
+  a?: number;
+}
+
+export interface IRGBColor {
+  red: number;
+  green: number;
+  blue: number;
+  alpha?: number;
+}
+
+export interface ISaturationChange {
+  type: typeof SATURATION_CHANGE;
+  payload: IHSVColor;
+}
+
+export interface IHueSliderChange {
+  type: typeof HUE_CHANGE;
+  payload: string;
+}
+export interface IAlphaSliderChange {
+  type: typeof ALPHA_SLIDER_CHANGE;
+  payload: string;
+}
+
+export interface IHexChange {
+  type: typeof HEX_CHANGE;
+  payload: string;
+}
+
+export interface IRedChange {
+  type: typeof RED_CHANGE;
+  payload: string;
+}
+
+export interface IGreenChange {
+  type: typeof GREEN_CHANGE;
+  payload: string;
+}
+
+export interface IBlueChange {
+  type: typeof BLUE_CHANGE;
+  payload: string;
+}
+
+export interface IAlphaChange {
+  type: typeof ALPHA_CHANGE;
+  payload: string;
+}
+
+export type ColorPickerActionTypes =
+  | ISaturationChange
+  | IHueSliderChange
+  | IAlphaSliderChange
+  | IHexChange
+  | IRedChange
+  | IGreenChange
+  | IBlueChange
+  | IAlphaChange;
+
+export type ReducerType = (
+  state: IColorPickerState,
+  action: ColorPickerActionTypes
+) => IColorPickerState;
+
+export function getInitialState(initialColor: IRGBColor | string) {
+  if (typeof initialColor === 'string') {
     const { hue, saturation, lightness } = parseToHsl(initialColor);
     const { red, green, blue } = parseToRgb(initialColor);
 
@@ -23,89 +118,100 @@ export function getInitialState(initialColor: any) {
       red,
       green,
       blue,
-      redInput: String(red),
-      greenInput: String(green),
-      blueInput: String(blue),
-      alpha: 1,
+      redInput: red,
+      greenInput: green,
+      blueInput: blue,
+      alpha: 100,
+      alphaInput: 100,
       hex: initialColor
     };
-  } else {
-    const { red, green, blue, alpha = 1 } = initialColor;
-    const hex = rgbToString({ red, green, blue });
-    const { hue, saturation, lightness } = parseToHsl(hex);
-
-    return {
-      hue,
-      saturation: saturation * 100,
-      lightness: lightness * 100,
-      red,
-      green,
-      blue,
-      redInput: String(red),
-      greenInput: String(green),
-      blueInput: String(blue),
-      alpha,
-      hex
-    };
   }
+  const { red, green, blue, alpha = 100 } = initialColor;
+  const hex = rgbToString({ red, green, blue });
+  const { hue, saturation, lightness } = parseToHsl(hex);
+
+  return {
+    hue,
+    saturation: saturation * 100,
+    lightness: lightness * 100,
+    red,
+    green,
+    blue,
+    redInput: red,
+    greenInput: green,
+    blueInput: blue,
+    alpha: 100,
+    alphaInput: 100,
+    hex
+  };
 }
 
-export function reducer(state: any, action: any) {
+export const reducer: ReducerType = (state, action) => {
   switch (action.type) {
-    case 'hue change': {
-      const hue = action.payload;
-      const nextRgb = hsl2rgb(hue, state.saturation, state.lightness);
-      const hex = rgbToString({
-        red: nextRgb.r,
-        green: nextRgb.g,
-        blue: nextRgb.b
-      } as any);
-      return {
-        ...state,
-        hue,
-        hex,
-        red: nextRgb.r,
-        green: nextRgb.g,
-        blue: nextRgb.b,
-        redInput: nextRgb.r,
-        greenInput: nextRgb.g,
-        blueInput: nextRgb.b
-      };
-    }
-    case 'saturation block change': {
+    case 'saturation change': {
       const hsl = hsv2hsl(action.payload.h, action.payload.s * 100, action.payload.v * 100);
-      const rgbFromHsl = hsl2rgb(state.hue, hsl.s, hsl.l);
-      const nextHex = rgbToString(rgbFromHsl.r, rgbFromHsl.g, rgbFromHsl.b);
+      const rgb = hsl2rgb(state.hue, hsl.s, hsl.l);
+      const hex = rgbToString(rgb.r, rgb.g, rgb.b);
+
       return {
         ...state,
         saturation: hsl.s,
         lightness: hsl.l,
-        hex: nextHex,
-        red: rgbFromHsl.r,
-        green: rgbFromHsl.g,
-        blue: rgbFromHsl.b,
-        redInput: rgbFromHsl.r,
-        greenInput: rgbFromHsl.g,
-        blueInput: rgbFromHsl.b
+        hex: hex,
+        red: rgb.r,
+        green: rgb.g,
+        blue: rgb.b,
+        redInput: rgb.r,
+        greenInput: rgb.g,
+        blueInput: rgb.b
+      };
+    }
+    case 'hue slider change': {
+      const hue = Number(action.payload);
+      const rgb = hsl2rgb(hue, state.saturation, state.lightness);
+      const hex = rgbToString({
+        red: rgb.r,
+        green: rgb.g,
+        blue: rgb.b
+      });
+
+      return {
+        ...state,
+        hue,
+        hex,
+        red: rgb.r,
+        green: rgb.g,
+        blue: rgb.b,
+        redInput: rgb.r,
+        greenInput: rgb.g,
+        blueInput: rgb.b
+      };
+    }
+    case 'alpha slider change': {
+      return {
+        ...state,
+        alpha: Number(action.payload) * 100,
+        alphaInput: Math.round(Number(action.payload) * 100)
       };
     }
     case 'hex change': {
       const validHex = /^#([0-9A-F]{3}){1,2}$/i.test(action.payload);
       if (validHex) {
-        const nextRgb = parseToRgb(action.payload);
-        const nextHsl = rgbToHsl(nextRgb.red, nextRgb.green, nextRgb.blue);
+        const rgb = parseToRgb(action.payload);
+        const hsl = rgbToHsl(rgb.red, rgb.green, rgb.blue);
+
         return {
           ...state,
-          hue: nextHsl.h,
-          saturation: nextHsl.s,
-          lightness: nextHsl.l,
+          hue: hsl.h,
+          saturation: hsl.s,
+          lightness: hsl.l,
           hex: action.payload,
-          red: nextRgb.red,
-          green: nextRgb.green,
-          blue: nextRgb.blue,
-          redInput: nextRgb.red,
-          greenInput: nextRgb.green,
-          blueInput: nextRgb.blue
+          red: rgb.red,
+          green: rgb.green,
+          blue: rgb.blue,
+          redInput: rgb.red,
+          greenInput: rgb.green,
+          blueInput: rgb.blue
         };
       } else {
         return {
@@ -139,6 +245,7 @@ export function reducer(state: any, action: any) {
 
       const hsl = rgbToHsl(state.red, green, state.blue);
       const hex = rgbToString(state.red, green, state.blue);
+
       return {
         ...state,
         hex,
@@ -156,6 +263,7 @@ export function reducer(state: any, action: any) {
 
       const hsl = rgbToHsl(state.red, state.green, blue);
       const hex = rgbToString(state.red, state.green, blue);
+
       return {
         ...state,
         hex,
@@ -167,12 +275,17 @@ export function reducer(state: any, action: any) {
       };
     }
     case 'alpha change': {
+      const alpha = Number(action.payload);
+
+      if (isNaN(alpha)) return state;
+
       return {
         ...state,
-        alpha: action.payload
+        alpha,
+        alphaInput: action.payload
       };
     }
     default:
-      throw new Error();
+      throw new Error('Unknown reducer case.');
   }
-}
+};

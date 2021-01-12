@@ -5,27 +5,31 @@
  * found at http://www.apache.org/licenses/LICENSE-2.0.
  */
 
-import styled, { ThemeProps, DefaultTheme, css } from 'styled-components';
-import { retrieveComponentStyles, DEFAULT_THEME, getColor } from '@zendeskgarden/react-theming';
 import { Range } from '@zendeskgarden/react-forms';
+import { IRGBColor } from '../elements/ColorPicker/reducer';
+import styled, { ThemeProps, DefaultTheme } from 'styled-components';
+import { retrieveComponentStyles, DEFAULT_THEME } from '@zendeskgarden/react-theming';
 
-const COMPONENT_ID = '{{component}}.example';
+const COMPONENT_ID = 'colorpicker.alpha';
 
 export interface IStyledAlphaProps extends ThemeProps<DefaultTheme> {
-  isCompact?: boolean;
+  rgb: IRGBColor;
 }
 
-export const StyledAlpha = styled(Range).attrs<any>({
+export const StyledAlpha = styled(Range).attrs<IStyledAlphaProps>({
   'data-garden-id': COMPONENT_ID,
   'data-garden-version': PACKAGE_VERSION
-})<any>`
-  margin-top: 4px !important;
+})<IStyledAlphaProps>`
+  /* stylelint-disable-next-line declaration-no-important */
+  margin-top: ${props => props.theme.space.base}px !important;
+  border-radius: 0;
+  /* stylelint-disable-next-line declaration-no-important */
   height: 0 !important;
 
   &::-webkit-slider-runnable-track {
-    height: 12px;
+    height: ${props => props.theme.space.base * 3}px;
     ${props => {
-      const { red, green, blue } = props.color;
+      const { red, green, blue } = props.rgb;
       return `
       background: linear-gradient(
         to right,
@@ -37,9 +41,9 @@ export const StyledAlpha = styled(Range).attrs<any>({
   }
 
   &::-webkit-slider-thumb {
-    margin-top: -2px;
-    width: 16px;
-    height: 16px;
+    margin-top: -${props => props.theme.space.base / 2}px;
+    width: ${props => props.theme.space.base * 4}px;
+    height: ${props => props.theme.space.base * 4}px;
   }
 
   ${props => retrieveComponentStyles(COMPONENT_ID, props)};

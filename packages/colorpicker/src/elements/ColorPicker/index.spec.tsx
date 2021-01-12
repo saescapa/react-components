@@ -11,14 +11,14 @@ import { ColorPicker } from '.';
 
 describe('ColorPicker', () => {
   it('is rendered as a div', () => {
-    const { container } = render(<ColorPicker />);
+    const { container } = render(<ColorPicker color="#FFF" />);
 
     expect(container.firstChild!.nodeName).toBe('DIV');
   });
 
   it('passes ref to underlying DOM element', () => {
     const ref = React.createRef<HTMLDivElement>();
-    const { container } = render(<ColorPicker ref={ref} />);
+    const { container } = render(<ColorPicker color="#FFF" ref={ref} />);
 
     expect(container.firstChild).toBe(ref.current);
   });

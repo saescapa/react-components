@@ -6,3 +6,4 @@
  */
 
 export { ColorPicker } from './elements/ColorPicker';
+export { IColorPickerState, IHSVColor, IRGBColor } from './elements/ColorPicker/reducer';

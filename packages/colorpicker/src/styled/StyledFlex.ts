@@ -8,17 +8,19 @@
 import styled from 'styled-components';
 import { retrieveComponentStyles, DEFAULT_THEME } from '@zendeskgarden/react-theming';
 
-const COMPONENT_ID = 'colorpicker';
+const COMPONENT_ID = 'colorpicker.flex';
 
-export const StyledColorPicker = styled.div.attrs({
+export const StyledFlex = styled.div.attrs({
   'data-garden-id': COMPONENT_ID,
   'data-garden-version': PACKAGE_VERSION
 })`
-  width: 312px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3px;
 
   ${props => retrieveComponentStyles(COMPONENT_ID, props)};
 `;
 
-StyledColorPicker.defaultProps = {
+StyledFlex.defaultProps = {
   theme: DEFAULT_THEME
 };

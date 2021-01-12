@@ -5,18 +5,35 @@
  * found at http://www.apache.org/licenses/LICENSE-2.0.
  */
 
-import React, { HTMLAttributes } from 'react';
+import React from 'react';
 import throttle from 'lodash.throttle';
 import { hsl2hsv } from '../utils/conversion';
+import { IHSVColor } from '../elements/ColorPicker/reducer';
+import { calculateChange, getNextSaturationValue } from '../utils/saturation';
 
-export const Saturation = ({ hue, saturation, lightness, onChange }: any) => {
-  const container = React.useRef();
+export interface ISaturationProps {
+  hue: number;
+  saturation: number;
+  lightness: number;
+  onChange: (hsv: IHSVColor, event: Event) => void;
+}
+
+export const Saturation: React.FC<ISaturationProps> = ({
+  hue,
+  saturation,
+  lightness,
+  onChange
+}) => {
+  const container = React.useRef<HTMLDivElement>(null);
   const hsv = hsl2hsv(hue, saturation, lightness);
-  const [pos, setPos] = React.useState<any>({});
+  const [pos, setPos] = React.useState<{ s: number; v: number }>({ s: 0, v: 0 });
+
   const throttledChange = throttle(e => {
-    const data = calculateChange(e, hsv, container.current);
-    setPos(getNextSaturationValue(e, container.current));
-    onChange(data);
+    if (container.current) {
+      const data = calculateChange(e, hsv, container.current);
+      setPos(getNextSaturationValue(e, container.current));
+      onChange(data, e);
+    }
   }, 50);
 
   const initialTop = `${100 - hsv.v}%`;
@@ -30,7 +47,7 @@ export const Saturation = ({ hue, saturation, lightness, onChange }: any) => {
     window.removeEventListener('mouseup', handleMouseUp);
   };
 
-  const handleMouseDown = (e: any) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     handleChange(e);
     window.addEventListener('mousemove', handleChange);
     window.addEventListener('mouseup', handleMouseUp);
@@ -84,7 +101,7 @@ export const Saturation = ({ hue, saturation, lightness, onChange }: any) => {
   return (
     <div
       style={styles.color as any}
-      ref={container as any}
+      ref={container}
       onMouseDown={handleMouseDown}
       onTouchMove={handleChange}
       onTouchStart={handleChange}
@@ -108,51 +125,3 @@ export const Saturation = ({ hue, saturation, lightness, onChange }: any) => {
     </div>
   );
 };
-
-function calculateChange(e: any, hsl: any, container: any) {
-  const { width: containerWidth, height: containerHeight } = container.getBoundingClientRect();
-  const x = typeof e.pageX === 'number' ? e.pageX : e.touches[0].pageX;
-  const y = typeof e.pageY === 'number' ? e.pageY : e.touches[0].pageY;
-  let left = x - (container.getBoundingClientRect().left + window.pageXOffset);
-  let top = y - (container.getBoundingClientRect().top + window.pageYOffset);
-
-  if (left < 0) {
-    left = 0;
-  } else if (left > containerWidth) {
-    left = containerWidth;
-  }
-
-  if (top < 0) {
-    top = 0;
-  } else if (top > containerHeight) {
-    top = containerHeight;
-  }
-
-  const saturation = left / containerWidth;
-  const bright = 1 - top / containerHeight;
-
-  getNextSaturationValue(e, container);
-
-  const hsv = {
-    h: hsl.h,
-    s: saturation,
-    v: bright
-  };
-
-  return hsv;
-}
-
-function getNextSaturationValue(ev: any, root: any) {
-  const rectSize = root.getBoundingClientRect();
-  const sPercentage = (ev.clientX - rectSize.left) / rectSize.width;
-  const vPercentage = (ev.clientY - rectSize.top) / rectSize.height;
-
-  const s = limit(Math.round(sPercentage * 100), 100);
-  const v = limit(Math.round(100 - vPercentage * 100), 100);
-
-  return { s, v };
-}
-
-function limit(value: number, max: number, min = 0) {
-  return value < min ? min : value > max ? max : value;
-}

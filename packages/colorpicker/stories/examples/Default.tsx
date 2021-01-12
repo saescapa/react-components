@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import { ColorPicker } from '@zendeskgarden/react-colorpicker';
+import { ColorPicker, IColorPickerState } from '@zendeskgarden/react-colorpicker';
 
 export default {
   title: 'Components/ColorPicker',
@@ -39,13 +39,12 @@ export const Default: Story<any> = () => {
         justifyContent: 'center'
       }}
     >
-      <ColorPicker color={lime} />
-      {/* <ColorPicker
-        color={color2}
-        onChange={data => {
-          setColor2(data.rgb);
+      <ColorPicker
+        color={lime}
+        onChange={(state: IColorPickerState, event: Event) => {
+          // console.log(state, event);
         }}
-      /> */}
+      />
     </div>
   );
 };

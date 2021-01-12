@@ -6,19 +6,22 @@
  */
 
 import styled from 'styled-components';
+import { Input } from '@zendeskgarden/react-forms';
 import { retrieveComponentStyles, DEFAULT_THEME } from '@zendeskgarden/react-theming';
 
-const COMPONENT_ID = 'colorpicker';
+const COMPONENT_ID = 'colorpicker.input';
 
-export const StyledColorPicker = styled.div.attrs({
+export const StyledInput = styled(Input).attrs({
   'data-garden-id': COMPONENT_ID,
   'data-garden-version': PACKAGE_VERSION
 })`
-  width: 312px;
+  /* stylelint-disable-next-line declaration-no-important */
+  margin-top: ${props => props.theme.space.base}px !important;
+  text-align: center;
 
   ${props => retrieveComponentStyles(COMPONENT_ID, props)};
 `;
 
-StyledColorPicker.defaultProps = {
+StyledInput.defaultProps = {
   theme: DEFAULT_THEME
 };
