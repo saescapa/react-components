@@ -37,7 +37,7 @@ const StyledAlphaField = styled(Field)`
 interface IColorPickerProps {
   /** Apply compact styling */
   color: string | IRGBColor;
-  onChange?: (state: IColorPickerState, event: any) => void;
+  onChange?: (state: IColorPickerState) => void;
 }
 
 /**
@@ -46,11 +46,10 @@ interface IColorPickerProps {
 export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
   ({ color, onChange }, ref) => {
     const [state, dispatch] = React.useReducer(reducer, getInitialState(color));
-    const [event, setEvent] = React.useState<Event>();
 
     React.useEffect(() => {
-      onChange && onChange(state, event);
-    }, [state, event, onChange]);
+      onChange && onChange(state);
+    }, [state, onChange]);
 
     return (
       <StyledColorPicker>
@@ -59,12 +58,11 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
             hue={state.hue}
             saturation={state.saturation}
             lightness={state.lightness}
-            onChange={(hsv: IHSVColor, e: Event) => {
+            onChange={(hsv: IHSVColor, e: React.SyntheticEvent<HTMLElement>) => {
               dispatch({
                 type: 'saturation change',
                 payload: hsv
               });
-              setEvent(e);
             }}
           />
         </StyledSaturation>

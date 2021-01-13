@@ -15,7 +15,7 @@ export interface ISaturationProps {
   hue: number;
   saturation: number;
   lightness: number;
-  onChange: (hsv: IHSVColor, event: Event) => void;
+  onChange: (hsv: IHSVColor, event: React.MouseEvent<any>) => void;
 }
 
 export const Saturation: React.FC<ISaturationProps> = ({

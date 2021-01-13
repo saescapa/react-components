@@ -23,14 +23,14 @@ export interface RGBColor {
 }
 
 export const Default: Story<any> = () => {
-  const magentaRGB = { r: 255, g: 0, b: 255, a: 1 };
+  const magentaRGB = { red: 255, green: 0, blue: 255, alpha: 50 };
   const magentaRGB2 = { r: 255, g: 0, b: 0, a: 1 };
   // const blueRGBString = 'rgb(0,2,255)';
   // const blueRGBString = { h: 240, s: 100, l: 50, a: 1 };
   const lime = '#b4da55';
   const [color, setColor] = React.useState(lime);
-  const [color1, setColor1] = React.useState<RGBColor>(magentaRGB);
-  const [color2, setColor2] = React.useState<RGBColor>(magentaRGB);
+  const [color1, setColor1] = React.useState<any>(magentaRGB);
+  const [color2, setColor2] = React.useState<any>(magentaRGB);
 
   return (
     <div
@@ -40,9 +40,9 @@ export const Default: Story<any> = () => {
       }}
     >
       <ColorPicker
-        color={lime}
-        onChange={(state: IColorPickerState, event: Event) => {
-          // console.log(state, event);
+        color={magentaRGB}
+        onChange={(state: IColorPickerState) => {
+          console.log(state);
         }}
       />
     </div>

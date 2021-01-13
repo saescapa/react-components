@@ -140,7 +140,7 @@ export function getInitialState(initialColor: IRGBColor | string) {
     redInput: red,
     greenInput: green,
     blueInput: blue,
-    alpha: 100,
+    alpha,
     alphaInput: 100,
     hex
   };
