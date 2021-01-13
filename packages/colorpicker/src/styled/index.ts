@@ -17,3 +17,4 @@ export * from './StyledInputGroup';
 export * from './StyledLabel';
 export * from './StyledRGBAField';
 export * from './StyledSliders';
+export * from './StyledCheckered';

@@ -22,28 +22,39 @@ export const StyledAlpha = styled(Range).attrs<IStyledAlphaProps>({
 })<IStyledAlphaProps>`
   /* stylelint-disable-next-line declaration-no-important */
   margin-top: ${props => props.theme.space.base}px !important;
-  border-radius: 0;
   /* stylelint-disable-next-line declaration-no-important */
   height: 0 !important;
 
   &::-webkit-slider-runnable-track {
+    border-radius: 0;
     height: ${props => props.theme.space.base * 3}px;
-    ${props => {
-      const { red, green, blue } = props.rgb;
-      return `
+    ${props => `
       background: linear-gradient(
         to right,
-        rgba(${red}, ${green}, ${blue}, 0) 0%,
-        rgb(${red}, ${green}, ${blue}, 1) 100%
+        rgba(${props.rgb.red}, ${props.rgb.green}, ${props.rgb.blue}, 0) 0%,
+        rgb(${props.rgb.red}, ${props.rgb.green}, ${props.rgb.blue}, 1) 100%
       );
-    `;
-    }}
+    `}
+  }
+
+  &::-moz-range-track {
+    border-radius: 0;
+    height: ${props => props.theme.space.base * 3}px;
+    ${props => `
+      background: linear-gradient(
+        to right,
+        rgba(${props.rgb.red}, ${props.rgb.green}, ${props.rgb.blue}, 0) 0%,
+        rgb(${props.rgb.red}, ${props.rgb.green}, ${props.rgb.blue}, 1) 100%
+      );
+    `}
+  }
+
+  &::-moz-range-progress {
+    opacity: 0;
   }
 
   &::-webkit-slider-thumb {
-    margin-top: -${props => props.theme.space.base / 2}px;
-    width: ${props => props.theme.space.base * 4}px;
-    height: ${props => props.theme.space.base * 4}px;
+    margin-top: -4px;
   }
 
   ${props => retrieveComponentStyles(COMPONENT_ID, props)};

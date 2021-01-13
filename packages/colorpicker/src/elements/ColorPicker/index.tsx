@@ -20,10 +20,19 @@ import {
   StyledInputGroup,
   StyledPreview,
   StyledSaturation,
-  StyledColorPicker
+  StyledColorPicker,
+  StyledCheckered
 } from '../../styled';
 import { Field, Label } from '@zendeskgarden/react-forms';
 import { getInitialState, reducer, IRGBColor, IHSVColor, IColorPickerState } from './reducer';
+import styled from 'styled-components';
+
+const StyledAlphaField = styled(Field)`
+  input {
+    position: relative;
+    z-index: 1;
+  }
+`;
 
 interface IColorPickerProps {
   /** Apply compact styling */
@@ -77,7 +86,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
               />
             </Field>
 
-            <Field>
+            <StyledAlphaField>
               <Label hidden>Alpha Slider</Label>
               <StyledAlpha
                 max={1}
@@ -88,7 +97,8 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
                   dispatch({ type: 'alpha slider change', payload: e.target.value });
                 }}
               />
-            </Field>
+              <StyledCheckered />
+            </StyledAlphaField>
           </StyledSliders>
         </StyledFlex>
 

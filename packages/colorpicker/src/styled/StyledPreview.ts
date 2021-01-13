@@ -15,17 +15,17 @@ export interface IStyledPreviewBoxProps extends ThemeProps<DefaultTheme> {
   rgb: IRGBColor;
 }
 
-export const StyledPreview = styled.div.attrs<IStyledPreviewBoxProps>({
+export const StyledPreview = styled.div.attrs<IStyledPreviewBoxProps>(props => ({
+  style: {
+    backgroundColor: `rgba(${props.rgb.red}, ${props.rgb.green}, ${props.rgb.blue}, ${props.rgb.alpha})`
+  },
   'data-garden-id': COMPONENT_ID,
   'data-garden-version': PACKAGE_VERSION
-})<IStyledPreviewBoxProps>`
+}))<IStyledPreviewBoxProps>`
   flex-shrink: 0;
   margin-top: ${props => props.theme.space.base}px;
   border-radius: ${props => props.theme.borderRadii.md};
   box-shadow: inset 0 0 0 1px ${props => getColor('black', undefined, props.theme, 0.37)!};
-  background-color: ${props =>
-      `rgba(${props.rgb.red}, ${props.rgb.green}, ${props.rgb.blue}, ${props.rgb.alpha})`}
-    ${props => retrieveComponentStyles(COMPONENT_ID, props)};
   width: ${props => props.theme.space.base * 8}px;
   height: ${props => props.theme.space.base * 8}px;
 `;
