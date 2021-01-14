@@ -21,11 +21,12 @@ export const StyledAlpha = styled(Range).attrs<IStyledAlphaProps>({
   'data-garden-version': PACKAGE_VERSION
 })<IStyledAlphaProps>`
   /* stylelint-disable-next-line declaration-no-important */
-  margin-top: ${props => props.theme.space.base}px !important;
+  // margin-top: 0 !important;
   /* stylelint-disable-next-line declaration-no-important */
-  height: 0 !important;
 
   &::-webkit-slider-runnable-track {
+    position: relative;
+    z-index: 2;
     border-radius: 0;
     height: ${props => props.theme.space.base * 3}px;
     ${props => `
@@ -38,6 +39,8 @@ export const StyledAlpha = styled(Range).attrs<IStyledAlphaProps>({
   }
 
   &::-moz-range-track {
+    position: relative;
+    z-index: 1;
     border-radius: 0;
     height: ${props => props.theme.space.base * 3}px;
     ${props => `
@@ -49,7 +52,25 @@ export const StyledAlpha = styled(Range).attrs<IStyledAlphaProps>({
     `}
   }
 
+  &::-ms-track {
+    position: relative;
+    z-index: 1;
+    border-radius: 0;
+    ${props => `
+      background: linear-gradient(
+        to right,
+        rgba(${props.rgb.red}, ${props.rgb.green}, ${props.rgb.blue}, 0) 0%,
+        rgba(${props.rgb.red}, ${props.rgb.green}, ${props.rgb.blue}, 1) 100%
+      );
+    `}
+    height: ${props => props.theme.space.base * 3}px;
+  }
+
   &::-moz-range-progress {
+    opacity: 0;
+  }
+
+  &::-ms-fill-lower {
     opacity: 0;
   }
 

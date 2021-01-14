@@ -15,12 +15,8 @@ export const StyledHue = styled(Range).attrs({
   'data-garden-id': COMPONENT_ID,
   'data-garden-version': PACKAGE_VERSION
 })`
-  /* stylelint-disable-next-line declaration-no-important */
-  margin-top: 0 !important;
-  /* stylelint-disable-next-line declaration-no-important */
-  height: 0 !important;
-
   &::-moz-range-track {
+    margin: 0;
     border-radius: 0;
     /* stylelint-disable */
     background: linear-gradient(
@@ -38,6 +34,25 @@ export const StyledHue = styled(Range).attrs({
   }
 
   &::-webkit-slider-runnable-track {
+    margin: 0;
+    border-radius: 0;
+    /* stylelint-disable */
+    background: linear-gradient(
+      to right,
+      #f00 0%,
+      #ff0 17%,
+      #0f0 33%,
+      #0ff 50%,
+      #00f 67%,
+      #f0f 83%,
+      #f00 100%
+    );
+    /* stylelint-enable */
+    height: ${props => props.theme.space.base * 3}px;
+  }
+
+  &::-ms-track {
+    margin: 0;
     border-radius: 0;
     /* stylelint-disable */
     background: linear-gradient(
@@ -55,6 +70,10 @@ export const StyledHue = styled(Range).attrs({
   }
 
   &::-moz-range-progress {
+    opacity: 0;
+  }
+
+  &::-ms-fill-lower {
     opacity: 0;
   }
 

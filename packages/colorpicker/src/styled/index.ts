@@ -18,3 +18,5 @@ export * from './ColorPicker/StyledLabel';
 export * from './ColorPicker/StyledRGBAField';
 export * from './ColorPicker/StyledSliders';
 export * from './ColorPicker/StyledCheckered';
+export * from './ColorPicker/StyledHueField';
+export * from './ColorPicker/StyledAlphaField';

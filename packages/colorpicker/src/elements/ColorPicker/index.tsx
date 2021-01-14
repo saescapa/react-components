@@ -21,18 +21,12 @@ import {
   StyledPreview,
   StyledSaturation,
   StyledColorPicker,
-  StyledCheckered
+  StyledCheckered,
+  StyledAlphaField,
+  StyledHueField
 } from '../../styled';
-import { Field, Label } from '@zendeskgarden/react-forms';
+import { Label } from '@zendeskgarden/react-forms';
 import { getInitialState, reducer, IRGBColor, IHSVColor, IColorPickerState } from './reducer';
-import styled from 'styled-components';
-
-const StyledAlphaField = styled(Field)`
-  input {
-    position: relative;
-    z-index: 1;
-  }
-`;
 
 interface IColorPickerProps {
   /** Apply compact styling */
@@ -72,7 +66,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
             rgb={{ red: state.red, green: state.green, blue: state.blue, alpha: state.alpha }}
           />
           <StyledSliders>
-            <Field>
+            <StyledHueField>
               <Label hidden>Hue Slider</Label>
               <StyledHue
                 step={1}
@@ -82,7 +76,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
                   dispatch({ type: 'hue slider change', payload: e.target.value });
                 }}
               />
-            </Field>
+            </StyledHueField>
 
             <StyledAlphaField>
               <Label hidden>Alpha Slider</Label>

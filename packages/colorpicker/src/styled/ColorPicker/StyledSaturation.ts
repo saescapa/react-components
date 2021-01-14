@@ -15,6 +15,7 @@ export const StyledSaturation = styled.div.attrs({
   'data-garden-version': PACKAGE_VERSION
 })`
   position: relative;
+  margin-bottom: ${props => props.theme.space.base}px;
   padding-bottom: 75%;
   overflow: hidden;
 

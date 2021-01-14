@@ -23,7 +23,6 @@ export const StyledPreview = styled.div.attrs<IStyledPreviewBoxProps>(props => (
   'data-garden-version': PACKAGE_VERSION
 }))<IStyledPreviewBoxProps>`
   flex-shrink: 0;
-  margin-top: ${props => props.theme.space.base}px;
   border-radius: ${props => props.theme.borderRadii.md};
   box-shadow: inset 0 0 0 1px ${props => getColor('black', undefined, props.theme, 0.37)!};
   width: ${props => props.theme.space.base * 8}px;
