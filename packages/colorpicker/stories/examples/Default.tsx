@@ -7,44 +7,21 @@
 
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import { ColorPicker, IColorPickerState } from '@zendeskgarden/react-colorpicker';
+import { action } from '@storybook/addon-actions';
+import { ColorPicker } from '@zendeskgarden/react-colorpicker';
 
 export default {
   title: 'Components/ColorPicker',
   component: ColorPicker
 } as Meta;
 
-export interface RGBColor {
-  a?: number;
-  b: number;
-  g: number;
-  r: number;
-  source?: string;
-}
-
-export const Default: Story<any> = () => {
-  const magentaRGB = { red: 255, green: 0, blue: 255, alpha: 50 };
-  const magentaRGB2 = { r: 255, g: 0, b: 0, a: 1 };
-  // const blueRGBString = 'rgb(0,2,255)';
-  // const blueRGBString = { h: 240, s: 100, l: 50, a: 1 };
-  const lime = '#b4da55';
-  const [color, setColor] = React.useState(lime);
-  const [color1, setColor1] = React.useState<any>(magentaRGB);
-  const [color2, setColor2] = React.useState<any>(magentaRGB);
+export const Default: Story = () => {
+  const [color] = React.useState('#17494D');
+  // const [color] = React.useState({ red: 255, green: 0, blue: 255, alpha: 50 });
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center'
-      }}
-    >
-      <ColorPicker
-        color={magentaRGB}
-        onChange={(state: IColorPickerState) => {
-          console.log(state);
-        }}
-      />
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <ColorPicker color={color} onChange={action('onChange')} />
     </div>
   );
 };

@@ -9,6 +9,7 @@ import { parseToHsl, parseToRgb, rgb as rgbToString } from 'polished';
 import { hsv2hsl, rgbToHsl, hsl2rgb } from '../../utils/conversion';
 
 export interface IColorPickerState {
+  hex: string;
   hue: number;
   saturation: number;
   lightness: number;
@@ -20,7 +21,6 @@ export interface IColorPickerState {
   greenInput: number | string;
   blueInput: number | string;
   alphaInput: number | string;
-  hex: string;
 }
 
 export const SATURATION_CHANGE = 'saturation change';
@@ -157,7 +157,7 @@ export const reducer: ReducerType = (state, action) => {
         ...state,
         saturation: hsl.s,
         lightness: hsl.l,
-        hex: hex,
+        hex,
         red: rgb.r,
         green: rgb.g,
         blue: rgb.b,
@@ -196,6 +196,7 @@ export const reducer: ReducerType = (state, action) => {
     }
     case 'hex change': {
       const validHex = /^#([0-9A-F]{3}){1,2}$/i.test(action.payload);
+
       if (validHex) {
         const rgb = parseToRgb(action.payload);
         const hsl = rgbToHsl(rgb.red, rgb.green, rgb.blue);
@@ -213,17 +214,18 @@ export const reducer: ReducerType = (state, action) => {
           greenInput: rgb.green,
           blueInput: rgb.blue
         };
-      } else {
-        return {
-          ...state,
-          hex: action.payload
-        };
       }
+
+      return {
+        ...state,
+        hex: action.payload
+      };
     }
     case 'red change': {
       const red = Number(action.payload);
 
       if (isNaN(red)) return state;
+      if (red > 255) return state;
 
       const hsl = rgbToHsl(red, state.green, state.blue);
       const hex = rgbToString(red, state.green, state.blue);
@@ -242,6 +244,7 @@ export const reducer: ReducerType = (state, action) => {
       const green = Number(action.payload);
 
       if (isNaN(green)) return state;
+      if (green > 255) return state;
 
       const hsl = rgbToHsl(state.red, green, state.blue);
       const hex = rgbToString(state.red, green, state.blue);
@@ -260,6 +263,7 @@ export const reducer: ReducerType = (state, action) => {
       const blue = Number(action.payload);
 
       if (isNaN(blue)) return state;
+      if (blue > 255) return state;
 
       const hsl = rgbToHsl(state.red, state.green, blue);
       const hex = rgbToString(state.red, state.green, blue);

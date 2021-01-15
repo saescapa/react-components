@@ -5,5 +5,6 @@
  * found at http://www.apache.org/licenses/LICENSE-2.0.
  */
 
-export { ColorPicker } from './elements/ColorPicker';
-export { IColorPickerState, IHSVColor, IRGBColor } from './elements/ColorPicker/reducer';
+export * from './elements/ColorPicker';
+export * from './elements/ColorDialog';
+export * from './elements/ColorPicker/reducer';

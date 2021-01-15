@@ -10,9 +10,9 @@ export function hsl2hsv(h: number, s: number, l: number) {
   const v = l + s;
 
   return {
-    h: h,
+    h,
     s: v === 0 ? 0 : ((2 * s) / v) * 100,
-    v: v
+    v
   };
 }
 
@@ -22,11 +22,12 @@ export function hsv2hsl(h: number, s: number, v: number) {
 
   let l = (2 - s) * v;
   let sl = s * v;
+
   sl /= l <= 1 ? l : 2 - l;
   sl = sl || 0;
   l /= 2;
 
-  return { h: h, s: sl * 100, l: l * 100 };
+  return { h, s: sl * 100, l: l * 100 };
 }
 
 export function rgb2hsv(r: number, g: number, b: number) {

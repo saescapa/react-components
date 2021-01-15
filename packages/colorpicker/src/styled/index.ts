@@ -20,3 +20,9 @@ export * from './ColorPicker/StyledSliders';
 export * from './ColorPicker/StyledCheckered';
 export * from './ColorPicker/StyledHueField';
 export * from './ColorPicker/StyledAlphaField';
+
+export * from './ColorDialog/StyledDialogPreview';
+export * from './ColorDialog/StyledButton';
+export * from './ColorDialog/StyledFauxInput';
+export * from './ColorDialog/StyledTooltipModal';
+export * from './ColorDialog/StyledTooltipBody';

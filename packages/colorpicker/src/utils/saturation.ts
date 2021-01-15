@@ -4,8 +4,27 @@
  * Use of this source code is governed under the Apache License, Version 2.0
  * found at http://www.apache.org/licenses/LICENSE-2.0.
  */
+
 import React from 'react';
 import { IHSVColor } from '../elements/ColorPicker/reducer';
+
+function limit(value: number, max: number, min = 0) {
+  return value < min ? min : value > max ? max : value;
+}
+
+export function getNextSaturationValue(
+  ev: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  root: HTMLElement
+) {
+  const rectSize = root.getBoundingClientRect();
+  const sPercentage = (ev.clientX - rectSize.left) / rectSize.width;
+  const vPercentage = (ev.clientY - rectSize.top) / rectSize.height;
+
+  const s = limit(Math.round(sPercentage * 100), 100);
+  const v = limit(Math.round(100 - vPercentage * 100), 100);
+
+  return { s, v };
+}
 
 export function calculateChange(
   e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -41,22 +60,4 @@ export function calculateChange(
     s: saturation,
     v: bright
   };
-}
-
-export function getNextSaturationValue(
-  ev: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  root: HTMLElement
-) {
-  const rectSize = root.getBoundingClientRect();
-  const sPercentage = (ev.clientX - rectSize.left) / rectSize.width;
-  const vPercentage = (ev.clientY - rectSize.top) / rectSize.height;
-
-  const s = limit(Math.round(sPercentage * 100), 100);
-  const v = limit(Math.round(100 - vPercentage * 100), 100);
-
-  return { s, v };
-}
-
-function limit(value: number, max: number, min = 0) {
-  return value < min ? min : value > max ? max : value;
 }

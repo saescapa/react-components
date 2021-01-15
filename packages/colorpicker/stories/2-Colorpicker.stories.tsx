@@ -15,4 +15,4 @@ export default {
 
 export { Default } from './examples/Default';
 
-// export { Dialog } from './examples/Dialog';
+export { Dialog } from './examples/ColorDialog';

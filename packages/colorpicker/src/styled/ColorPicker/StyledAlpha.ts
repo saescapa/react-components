@@ -20,10 +20,6 @@ export const StyledAlpha = styled(Range).attrs<IStyledAlphaProps>({
   'data-garden-id': COMPONENT_ID,
   'data-garden-version': PACKAGE_VERSION
 })<IStyledAlphaProps>`
-  /* stylelint-disable-next-line declaration-no-important */
-  // margin-top: 0 !important;
-  /* stylelint-disable-next-line declaration-no-important */
-
   &::-webkit-slider-runnable-track {
     position: relative;
     z-index: 2;

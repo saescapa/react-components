@@ -28,7 +28,8 @@ import {
 import { Label } from '@zendeskgarden/react-forms';
 import { getInitialState, reducer, IRGBColor, IHSVColor, IColorPickerState } from './reducer';
 
-interface IColorPickerProps {
+export interface IColorPickerProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'color' | 'onChange'> {
   /** Apply compact styling */
   color: string | IRGBColor;
   onChange?: (state: IColorPickerState) => void;
@@ -38,7 +39,7 @@ interface IColorPickerProps {
  * Accepts all `<div>` attributes and events
  */
 export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
-  ({ color, onChange }, ref) => {
+  ({ color, onChange, onBlur }, ref) => {
     const [state, dispatch] = React.useReducer(reducer, getInitialState(color));
 
     React.useEffect(() => {
@@ -46,13 +47,13 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
     }, [state, onChange]);
 
     return (
-      <StyledColorPicker>
+      <StyledColorPicker ref={ref}>
         <StyledSaturation>
           <Saturation
             hue={state.hue}
             saturation={state.saturation}
             lightness={state.lightness}
-            onChange={(hsv: IHSVColor, e: React.SyntheticEvent<HTMLElement>) => {
+            onChange={(hsv: IHSVColor) => {
               dispatch({
                 type: 'saturation change',
                 payload: hsv
@@ -75,6 +76,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
                 onChange={e => {
                   dispatch({ type: 'hue slider change', payload: e.target.value });
                 }}
+                onBlur={onBlur}
               />
             </StyledHueField>
 
@@ -88,6 +90,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   dispatch({ type: 'alpha slider change', payload: e.target.value });
                 }}
+                onBlur={onBlur}
               />
               <StyledCheckered />
             </StyledAlphaField>
@@ -104,39 +107,52 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
               onChange={e => {
                 dispatch({ type: 'hex change', payload: e.target.value });
               }}
+              onBlur={onBlur}
             />
           </StyledHexField>
           <StyledRGBAField>
             <StyledLabel>R</StyledLabel>
             <StyledInput
               isCompact
+              type="number"
+              min="0"
+              max="255"
               maxLength={3}
               value={state.redInput}
               onChange={e => {
                 dispatch({ type: 'red change', payload: e.target.value });
               }}
+              onBlur={onBlur}
             />
           </StyledRGBAField>
           <StyledRGBAField>
             <StyledLabel>G</StyledLabel>
             <StyledInput
               isCompact
+              type="number"
+              min="0"
+              max="255"
               maxLength={3}
               value={state.greenInput}
               onChange={e => {
                 dispatch({ type: 'green change', payload: e.target.value });
               }}
+              onBlur={onBlur}
             />
           </StyledRGBAField>
           <StyledRGBAField>
             <StyledLabel>B</StyledLabel>
             <StyledInput
               isCompact
+              type="number"
+              min="0"
+              max="255"
               maxLength={3}
               value={state.blueInput}
               onChange={e => {
                 dispatch({ type: 'blue change', payload: e.target.value });
               }}
+              onBlur={onBlur}
             />
           </StyledRGBAField>
           <StyledRGBAField>
@@ -153,6 +169,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, IColorPickerProps>(
                   payload: e.target.value
                 });
               }}
+              onBlur={onBlur}
             />
           </StyledRGBAField>
         </StyledInputGroup>

@@ -31,6 +31,7 @@ export const Saturation: React.FC<ISaturationProps> = ({
   const throttledChange = throttle(e => {
     if (container.current) {
       const data = calculateChange(e, hsv, container.current);
+
       setPos(getNextSaturationValue(e, container.current));
       onChange(data, e);
     }
@@ -40,6 +41,8 @@ export const Saturation: React.FC<ISaturationProps> = ({
   const initialLeft = `${hsv.s}%`;
   const topPosition = pos.v ? `${100 - pos.v}%` : initialTop;
   const leftPosition = pos.s ? `${pos.s}%` : initialLeft;
+
+  const handleChange = (e: any) => throttledChange(e);
 
   const handleMouseUp = () => {
     throttledChange.cancel();
@@ -52,8 +55,6 @@ export const Saturation: React.FC<ISaturationProps> = ({
     window.addEventListener('mousemove', handleChange);
     window.addEventListener('mouseup', handleMouseUp);
   };
-
-  const handleChange = (e: any) => throttledChange(e);
 
   const styles = {
     color: {
@@ -88,8 +89,8 @@ export const Saturation: React.FC<ISaturationProps> = ({
       cursor: 'default'
     },
     circle: {
-      width: '4px',
-      height: '4px',
+      width: '8px',
+      height: '8px',
       boxShadow: `0 0 0 1.5px #fff, inset 0 0 1px 1px rgba(0,0,0,.3),
           0 0 1px 2px rgba(0,0,0,.4)`,
       borderRadius: '50%',
@@ -102,6 +103,7 @@ export const Saturation: React.FC<ISaturationProps> = ({
     <div
       style={styles.color as any}
       ref={container}
+      role="presentation"
       onMouseDown={handleMouseDown}
       onTouchMove={handleChange}
       onTouchStart={handleChange}
